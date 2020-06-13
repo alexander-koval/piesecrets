@@ -1,0 +1,24 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pep8 = "*"
+
+[packages]
+wagtail = "~=2.9"
+#wagtail-markdown = ">=0.5"
+wagtail-markdown = "*"
+wagtail-metadata = ">=3.0.0"
+psycopg2-binary = "*"
+Django = "~=2.2"
+ipython = "*"
+django-weasyprint = "~=1.0"
+wagtailfontawesome = "*"
+django-el-pagination = "~=3.2"
+django-compressor = "*"
+wagtailmenus = "~=3.0"
+
+[requires]
+python_version = "~=3.8"
