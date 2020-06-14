@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailmarkdown wagtailroutablepage_tags wagtailembeds_tags %}
+
+
+{% block title %}{{ self.title }} | {{ blog_page.title }}{% endblock title %}
+{% block meta_title %}{% if self.seo_title %}{{ self.seo_title }}{% else %}{{ self.title }}{% endif %}{% endblock meta_title %}
+{% block meta_description %}{% if self.search_description %}{{ self.search_description }}{% else %}{{ self.body|striptags|truncatewords:20 }}{% endif %}{% endblock meta_description %}
+{% comment %} {% block canonical %}{% canonical_url self%}{% endblock canonical %} {% endcomment %}
+
+{% block content %}
+<section id="post" class="py-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card p-5">
+          <p class="text-center">
+            <i class="far fa-clock"></i> {{post.date}} &nbsp;
+          </p>
+          <h1 class="card-title text-center">{{ page.title }}</h1>
+          {% image post.header_image original as header_image %}
+          <img src="{{ header_image.url }}" class="img-fluid card-img-top"></img>
+          {% comment %} <p> {% endcomment %}
+          {% comment %} <i class="far fa-user"></i> {{post.owner}} &nbsp; {% endcomment %}
+            {% comment %} {% post_categories %} {% endcomment %}
+          {% comment %} </p> {% endcomment %}
+          {% if post.ingredients %}
+          <div class="card-footer">
+            {{ post.ingredients|markdown|safe }}
+          </div>
+          {% endif %}
+
+
+          {% with blocks=self.body %}
+          {% for block in blocks %}
+          {% if block.block_type == 'heading' %}
+          <h2>{{ block.value }}</h2>
+          {% else %}
+          <div class="block-{{ block.block_type }} card-body d-flex justify-content-center">
+          {% if block.block_type == 'image' %}
+          {% image block.value original as header_image %}
+            <img src="{{ header_image.url }}" class="img-fluid card-img-top"></img>
+          {% elif block.block_type == 'embedded_video' %}
+            <div class="embed-responsive embed-responsive-16by9">
+              {{ block }}
+            </div>
+          {% else %}
+            {{ block }}          
+          {% endif %}
+          </div>
+          {% endif %}
+          {% endfor %}
+
+          {% endwith %}
+          <hr>
+          <p><a href="{{ page.get_parent.url }}">Return to blog</a></p>
+        </div>
+      </div>
+      <!-- SIDEBAR -->
+      <!-- <div id="sidebar" class="col-md-4"></div> -->
+      <div class="col-md-4">
+        {% include 'blocks/sidebar.html' %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
+
+{% if page.tags.all.count %}
+<div class="tags">
+  <h3>Tags</h3>
+  {% for tag in page.tags.all %}
+  <a href="{% routablepageurl blog_page "post_by_tag" tag.slug %}">{{ tag }}</a>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% with categories=page.categories.all %}
+{% if categories %}
+<h3>Categories</h3>
+<ul>
+  {% for category in categories %}
+  <li style="display: inline">
+    <a href="{% routablepageurl blog_page "post_by_category" category.slug %}">{{ category.name }}</a>
+  </li>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}

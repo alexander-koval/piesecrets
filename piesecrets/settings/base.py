@@ -57,6 +57,8 @@ INSTALLED_APPS = [
     'wagtail.contrib.modeladmin',  # Don't repeat if it's there already
     'wagtailmenus',
 
+    'wagtailfontawesome',
+    'wagtail_blocks',
     'piesecrets',
 ]
 

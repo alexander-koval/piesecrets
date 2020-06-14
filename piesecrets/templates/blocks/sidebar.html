@@ -1,4 +1,9 @@
-<div>
+{% load static wagtailcore_tags wagtailimages_tags wagtailroutablepage_tags %}
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/piesecrets.css' %}">
+
+</head>
+<div id="sidebar">
   <div class="card about pb-4">
     <div class="card-body">
       <div class="card-title sidebar-item widget-title">SEARCH</div>
@@ -20,7 +25,7 @@
     <div class="card-body">
       <div class="card-title sidebar-item widget-title">ABOUT ME</div>
       <hr class="sidebar-hr">
-      <img src="img/person1.jpg" alt="" class="img-fluid rounded-circle w-50 mb-3">
+      <img src="{% static 'img/person2.jpg' %}" alt="" class="img-fluid rounded-circle w-50 mb-3">
       <p class="text-muted">Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo delectus nisi magnam adipisci, corporis nam?</p>
       <div class="d-flex justify-content-center">
         <div class="p-4">

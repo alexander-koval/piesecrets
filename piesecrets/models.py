@@ -14,6 +14,8 @@ from wagtail.images.models import Image
 from wagtail.core.models import Page
 from wagtail.core.fields import RichTextField, StreamField
 
+
+from django.db.models import TextField
 # from wagtailmarkdown.blocks import MarkdownPanel
 from wagtailmarkdown.edit_handlers import MarkdownPanel
 from wagtailmarkdown.fields import MarkdownField
@@ -25,8 +27,11 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from datetime import date, datetime
 
 from .blocks import (
-    ColumnBlock, TwoColumnBlock,
+    ColumnBlock, TwoColumnBlock, VideoBlock
 )
+from wagtail_blocks.blocks import HeaderBlock, ListBlock, ImageTextOverlayBlock, CroppedImagesWithTextBlock, \
+    ListWithImagesBlock, ThumbnailGalleryBlock, ChartBlock, MapBlock, ImageSliderBlock
+
 from django.utils.dateformat import DateFormat
 from django.utils.formats import date_format
 from django.http import Http404
@@ -92,7 +97,8 @@ class BlogPage(RoutablePageMixin, Page):
             self.search_term = df.format('F Y')
         if day:
             self.posts = self.posts.filter(date__day=day)
-            self.search_term = date_format(date(int(year), int(month), int(day)))
+            self.search_term = date_format(
+                date(int(year), int(month), int(day)))
         return Page.serve(self, request, *args, **kwargs)
 
     @route(r'^(\d{4})/(\d{2})/(\d{2})/(.+)$')
@@ -133,24 +139,37 @@ class BlogPage(RoutablePageMixin, Page):
 
 
 class PostPage(Page):
-    body = RichTextField(blank=True)
-    # body = StreamField([
-    #     ('heading', blocks.CharBlock(classname="full title")),
-    #     ('paragraph', blocks.RichTextBlock()),
-    #     ('image', ImageChooserBlock(icon="image")),
-    #     ('two_columns', TwoColumnBlock()),
-    #     ('embedded_video', EmbedBlock(icon="media")),
-    # ], null=True, blank=True)
+    # body = RichTextField(blank=True, null=True)
+    ingredients = MarkdownField(verbose_name='ingredients', blank=True)
+    body = StreamField([
+        ('heading', blocks.CharBlock(classname="full title")),
+        ('paragraph', blocks.RichTextBlock()),
+        ('image', ImageChooserBlock(icon="image")),
+        # ('two_columns', TwoColumnBlock()),
+        # ('video', VideoBlock(icon="video")),
+        ('embedded_video', EmbedBlock(icon="media")),
+        # ('header', HeaderBlock()),
+        # ('list', ListBlock()),
+        # ('image_text_overlay', ImageTextOverlayBlock()),
+        # ('cropped_images_with_text', CroppedImagesWithTextBlock()),
+        # ('list_with_images', ListWithImagesBlock()),
+        # ('thumbnail_gallery', ThumbnailGalleryBlock()),
+        # ('chart', ChartBlock()),
+        # ('image_slider', ImageSliderBlock()),        
+    ], null=True, blank=True)
 
-    date = models.DateTimeField(verbose_name="Post date", default=datetime.today)
+    date = models.DateTimeField(
+        verbose_name="Post date", default=datetime.today)
     excerpt = MarkdownField(verbose_name='excerpt', blank=True)
-    header_image = models.ForeignKey('wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    header_image = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     tags = ClusterTaggableManager(through=BlogPageTag, blank=True)
     categories = ParentalManyToManyField('piesecrets.BlogCategory', blank=True)
     content_panels = Page.content_panels + [
         ImageChooserPanel('header_image'),
-        # StreamFieldPanel('body'),
-        MarkdownPanel('body', classname="full"),
+        MarkdownPanel('ingredients'),
+        StreamFieldPanel('body'),
+        # FieldPanel('body', classname="full"),
         MarkdownPanel('excerpt'),
         FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
         FieldPanel('tags'),
@@ -189,7 +208,8 @@ class LandingPage(Page):
         return self.get_parent().specific
 
     def get_context(self, request, *args, **kwargs):
-        context = super(LandingPage, self).get_context(request, *args, **kwargs)
+        context = super(LandingPage, self).get_context(
+            request, *args, **kwargs)
         context['blog_page'] = self.blog_page
         return context
 
@@ -224,3 +244,23 @@ class FormPage(AbstractEmailForm):
     @property
     def blog_page(self):
         return self.get_parent().specific
+
+
+class AboutPage(Page):
+    body = RichTextField(blank=True)
+    header_image = models.ForeignKey(
+        'wagtailimages.Image', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
+    content_panels = Page.content_panels + [
+        ImageChooserPanel('header_image'),
+        MarkdownPanel('body', classname="full"),
+    ]
+
+    @property
+    def about_page(self):
+        return self.get_parent().specific
+
+    def get_context(self, request, *args, **kwargs):
+        context = super(AboutPage, self).get_context(request, *args, **kwargs)
+        context['about_page'] = self.about_page
+        return context
+

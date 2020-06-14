@@ -1,5 +1,6 @@
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.embeds.blocks import EmbedBlock
 from wagtailmarkdown.blocks import MarkdownBlock
 
 
@@ -20,5 +21,14 @@ class TwoColumnBlock(blocks.StructBlock):
         template = 'blocks/two_column_block.html'
         icon = 'placeholder'
         label = 'Two Columns'
+
+class VideoBlock(blocks.StructBlock):
+    """Only used for Video Card modals."""
+    video = EmbedBlock() # <-- the part we need
+
+    class Meta:
+        template = "streams/video_card_block.html"
+        icon = "media"
+        label = "Embed Video"
 
 

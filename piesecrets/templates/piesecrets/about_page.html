@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags wagtailmarkdown el_pagination_tags %}
+
+{% block content %}
+    <!-- ABOUT -->
+    <section id="about" class="py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-10 mx-auto">
+                    <!-- block content -->
+                    <div class="card text-center p-5">
+                        <div class="card-body">
+                            <h4 class="card-title entry-title display-4">{{ page.title }}</h4>
+                        </div>
+                        {% image page.header_image original as header_image %}
+                        <img src="{{ header_image.url }}" class="img-fluid card-img-top"></img>              
+                        <!-- <img src="https://source.unsplash.com/random/710x710/?woman" alt="" -->
+                            <!-- class="img-fluid card-ing-top"> -->
+                        <div class="card-body">
+                            <p class="card-text">
+                                {{ page.body|richtext|safe }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
