@@ -1,6 +1,5 @@
 {% load menu_tags %}
 
-<ul class="navbar-nav ml-auto">
     {% for item in menu_items %}
         <li class="nav-item">
             <a href="{{ item.href }}" class="nav-link">
@@ -11,4 +10,3 @@
             </a>
         </li>
     {% endfor %}
-</ul>

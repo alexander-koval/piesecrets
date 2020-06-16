@@ -20,9 +20,9 @@
           {% image post.header_image original as header_image %}
           <img src="{{ header_image.url }}" class="img-fluid card-img-top"></img>
           {% comment %} <p> {% endcomment %}
-          {% comment %} <i class="far fa-user"></i> {{post.owner}} &nbsp; {% endcomment %}
+            {% comment %} <i class="far fa-user"></i> {{post.owner}} &nbsp; {% endcomment %}
             {% comment %} {% post_categories %} {% endcomment %}
-          {% comment %} </p> {% endcomment %}
+            {% comment %} </p> {% endcomment %}
           {% if post.ingredients %}
           <div class="card-footer">
             {{ post.ingredients|markdown|safe }}
@@ -36,16 +36,16 @@
           <h2>{{ block.value }}</h2>
           {% else %}
           <div class="block-{{ block.block_type }} card-body d-flex justify-content-center">
-          {% if block.block_type == 'image' %}
-          {% image block.value original as header_image %}
+            {% if block.block_type == 'image' %}
+            {% image block.value original as header_image %}
             <img src="{{ header_image.url }}" class="img-fluid card-img-top"></img>
-          {% elif block.block_type == 'embedded_video' %}
+            {% elif block.block_type == 'embedded_video' %}
             <div class="embed-responsive embed-responsive-16by9">
               {{ block }}
             </div>
-          {% else %}
-            {{ block }}          
-          {% endif %}
+            {% else %}
+            {{ block }}
+            {% endif %}
           </div>
           {% endif %}
           {% endfor %}
@@ -58,7 +58,7 @@
       <!-- SIDEBAR -->
       <!-- <div id="sidebar" class="col-md-4"></div> -->
       <div class="col-md-4">
-        {% include 'blocks/sidebar.html' %}
+        {% include 'components/sidebar.html' %}
       </div>
     </div>
   </div>
@@ -82,6 +82,6 @@
   <li style="display: inline">
     <a href="{% routablepageurl blog_page "post_by_category" category.slug %}">{{ category.name }}</a>
   </li>
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
+{% endfor %}
+{% endif %}
+{% endwith %}
