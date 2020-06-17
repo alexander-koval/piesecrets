@@ -5,9 +5,9 @@
     <div class="card-body">
       <div class="card-title sidebar-item widget-title">SEARCH</div>
       <hr class="sidebar-hr">
-      <form action="" class="form-search" role="search" method="get">
+      <form action="{% routablepageurl blog_page 'post_search' %}" class="form-search" role="search" method="get">
         <div class="input-group">
-          <input type="text" class="form-control search-query" name="search" placeholder="Search" title="Search for:">
+          <input type="text" class="form-control search-query" name="q" placeholder="Search&hellip;" title="Search for:">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="submit">
               <span class="fas fa-search"></span>   
@@ -43,6 +43,7 @@
       </div>
     </div>
   </div>    
+  {% categories_list %}
 
   {% tags_list %}
 </div>

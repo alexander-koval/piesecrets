@@ -39,3 +39,14 @@ def categories_list(context):
         'request': context['request'],
         'categories': categories,
     }
+
+@register.inclusion_tag('components/categories_menu.html', 
+                        takes_context=True)
+def categories_menu(context):
+    blog_page = context['blog_page']
+    categories = BlogCategory.objects.all()
+    return {
+        'blog_page': blog_page,
+        'request': context['request'],
+        'categories': categories,
+    }

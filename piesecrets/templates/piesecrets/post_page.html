@@ -15,10 +15,20 @@
         <div class="card p-5">
           <p class="text-center">
             <i class="far fa-clock"></i> {{post.date}} &nbsp;
-          </p>
+            </p>
+            {% if page.categories.all.count %}
+            <div class="tags card-subtitle mx-auto">
+              {% for category in page.categories.all %}
+              <a href="{% routablepageurl blog_page "post_by_category" category.slug %}">
+                <span class="badge badge-pill badge-light">{{ category }}</span>
+              </a>
+              {% endfor %}
+            </div>
+            {% endif %}
           <h1 class="card-title text-center">{{ page.title }}</h1>
           {% image post.header_image original as header_image %}
-          <img src="{{ header_image.url }}" class="img-fluid card-img-top"></img>
+          <img src="{{ header_image.url }}" class="img-fluid card-img-top">
+          </img>
           {% comment %} <p> {% endcomment %}
             {% comment %} <i class="far fa-user"></i> {{post.owner}} &nbsp; {% endcomment %}
             {% comment %} {% post_categories %} {% endcomment %}
@@ -82,6 +92,6 @@
   <li style="display: inline">
     <a href="{% routablepageurl blog_page "post_by_category" category.slug %}">{{ category.name }}</a>
   </li>
-{% endfor %}
-{% endif %}
-{% endwith %}
+  {% endfor %}
+  {% endif %}
+  {% endwith %}

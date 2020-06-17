@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static wagtailcore_tags widget_tweaks %}
+
+{% block content %}
+
+<!-- CONTACT -->
+<section id="contact" class="py-4">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 mx-auto">
+        <div class="card p-5">
+          <div class="card-body">
+            <h3 class="card-title entry-title display-4 text-center">Contact Me</h3>
+            <form action="{% pageurl page %}" method="POST" class="card-body">
+              {% csrf_token %}
+  
+              {% if form.non_field_errors %}
+              <div class="alert alert-danger" role="alert">
+                {% for error in form.non_field_errors %}
+                {{ error }}
+                {% endfor %}
+              </div>
+              {% endif %}
+  
+              {% for field in form.visible_fields %}
+              <div class="form-group">
+                {{ field.label_tag }}
+                {% render_field field class+="form-control" %}
+              </div>
+              {% endfor %}
+  
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+{% endblock %}

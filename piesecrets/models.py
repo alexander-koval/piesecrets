@@ -25,6 +25,7 @@ from wagtail.snippets.models import register_snippet
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from datetime import date, datetime
+from wagtail.search import index
 
 from .blocks import (
     ColumnBlock, TwoColumnBlock, VideoBlock
@@ -35,6 +36,7 @@ from wagtail_blocks.blocks import HeaderBlock, ListBlock, ImageTextOverlayBlock,
 from django.utils.dateformat import DateFormat
 from django.utils.formats import date_format
 from django.http import Http404
+
 
 
 @register_snippet
@@ -71,6 +73,11 @@ class BlogPage(RoutablePageMixin, Page):
     content_panels = Page.content_panels + [
         FieldPanel('description', classname="full")
     ]
+
+    # search_fields = Page.search_fields + [
+    #     index.SearchField('title'),
+    #     index.SearchField('body'),
+    # ]
 
     def get_context(self, request, *args, **kwargs):
         context = super(BlogPage, self).get_context(request, *args, **kwargs)
@@ -129,10 +136,11 @@ class BlogPage(RoutablePageMixin, Page):
 
     @route(r'^search/$')
     def post_search(self, request, *args, **kwargs):
+        from django.db.models import Q
         search_query = request.GET.get('q', None)
         self.posts = self.get_posts()
         if search_query:
-            self.posts = self.posts.filter(body__contains=search_query)
+            self.posts = self.posts.filter(Q(title__contains=search_query) | Q(body__contains=search_query))
             self.search_term = search_query
             self.search_type = 'search'
         return Page.serve(self, request, *args, **kwargs)
@@ -155,7 +163,7 @@ class PostPage(Page):
         # ('list_with_images', ListWithImagesBlock()),
         # ('thumbnail_gallery', ThumbnailGalleryBlock()),
         # ('chart', ChartBlock()),
-        # ('image_slider', ImageSliderBlock()),        
+        # ('image_slider', ImageSliderBlock()),
     ], null=True, blank=True)
 
     date = models.DateTimeField(
@@ -263,4 +271,3 @@ class AboutPage(Page):
         context = super(AboutPage, self).get_context(request, *args, **kwargs)
         context['about_page'] = self.about_page
         return context
-

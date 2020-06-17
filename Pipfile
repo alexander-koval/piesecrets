@@ -5,6 +5,7 @@ verify_ssl = true
 
 [dev-packages]
 pep8 = "*"
+ptvsd = "*"
 
 [packages]
 wagtail = "~=2.9"
@@ -22,6 +23,7 @@ django-compressor = "*"
 wagtailmenus = "~=3.0"
 wagtail-blocks = "~=0.7"
 wagtailvideos = "~=2.8"
+django-widget-tweaks = "~=1.4.8"
 
 [requires]
 python_version = "3.8"
