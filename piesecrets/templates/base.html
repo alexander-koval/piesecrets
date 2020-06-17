@@ -58,37 +58,23 @@
     </div>
   </nav>
 
-  <!-- <nav class="navbar navbar-expand-md navbar-light sticky-top py-1 mb-4" id="main-nav">
-    <div class="container">
-      <a href="#home" class="navbar-brand"></a>
-      <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ui class="navbar-nav mx-auto">
-          <li class="nav-item active">
-            <a href="/" class="nav-link">Home</a>
-          </li>
-          {% for item in menu_items %}
-          <li class="nav-item">
-            <a href="{{ item.href }}" class="nav-link">{{ item.text }}{% if item.has_children_in_menu %} <span
-                class="sr-only"></span>{% endif %}</a>
-          </li>
-          {% endfor %}
-          <li class="nav-item">
-            <a href="/about/" class="nav-link">About Me</a>
-          </li>
-          <li class="nav-item">
-            <a href="contact.html" class="nav-link">Contact</a>
-          </li>
-        </ui>
-      </div>
-    </div>
-  </nav> -->
-
   {% block content %}
 
   {% endblock %}
+
+  <!-- FOOTER -->
+  <footer id="main-footer" class="py-5 about text-dark">
+    <div class="container">
+      <div class="row text-center">
+        <div class="col-md-12 ml-auto">
+          <p class="lead">
+            Copyright &copy; <span id="year"></span> Piesecrets
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
 
   <!-- {# Global javascript #} -->
   <script src="http://code.jquery.com/jquery-3.3.1.min.js"

@@ -79,7 +79,7 @@
   <div class="container">
     <div class="row">
       <div class="col-md-8">
-        {% paginate 5 posts %}
+        {% paginate 5 posts %}        
         {% for post in posts %}
         <div class="card p-5">
           {% image post.header_image original as header_image %}
@@ -101,12 +101,19 @@
             </p>
             <a href="{% pageurl post %}" class="btn btv-primary">Read More &rarr;</a>
           </div>
-          {% endfor %}
-
           <ul class="pagination justify-content-center mb-4">
             {% show_pages %}
           </ul>
         </div>
+          {% empty %}          
+            <div class="card p-5 text-center">
+              <h4 class="card-title mb-5">Nothing found</h4>  
+              <h1>
+                <i class="fas fa-file-alt mb-5"></i>
+              </h1>  
+              <p>Sorry, but nothing matched your search terms. Please try again with some different keywords.</p>   
+            </div>
+          {% endfor %}          
       </div>
       <!-- SIDEBAR -->
       <!-- <div id="sidebar" class="col-md-4"></div> -->
