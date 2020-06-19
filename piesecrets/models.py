@@ -38,7 +38,6 @@ from django.utils.formats import date_format
 from django.http import Http404
 
 
-
 @register_snippet
 class BlogCategory(models.Model):
     name = models.CharField(max_length=255)
@@ -73,6 +72,9 @@ class BlogPage(RoutablePageMixin, Page):
     content_panels = Page.content_panels + [
         FieldPanel('description', classname="full")
     ]
+
+    # class Meta:
+    #     unique_together = ("title", "body")
 
     # search_fields = Page.search_fields + [
     #     index.SearchField('title'),
@@ -140,7 +142,8 @@ class BlogPage(RoutablePageMixin, Page):
         search_query = request.GET.get('q', None)
         self.posts = self.get_posts()
         if search_query:
-            self.posts = self.posts.filter(Q(title__contains=search_query) | Q(body__contains=search_query))
+            self.posts = self.posts.filter(
+                Q(title__contains=search_query) | Q(body__contains=search_query))
             self.search_term = search_query
             self.search_type = 'search'
         return Page.serve(self, request, *args, **kwargs)

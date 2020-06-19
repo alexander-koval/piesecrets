@@ -107,9 +107,9 @@ WSGI_APPLICATION = 'piesecrets.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'NAME': 'piesecrets',
+        'USER': 'piesecrets',
+        'PASSWORD': '6UavraTts7nB',
         'HOST': 'db',
         'PORT': 5432,
     }
