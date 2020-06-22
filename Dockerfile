@@ -1,10 +1,53 @@
-FROM python:3
+FROM python:3-slim as base
+ENV PYROOT /pyroot
+ENV PYTHONUSERBASE $PYROOT
+
+FROM base as builder
+RUN pip install pipenv==2018.10.13
+
+RUN mkdir /code
+WORKDIR /code
+COPY Pipfile Pipfile.lock /code/
+RUN pip install pipenv==2018.10.13 && \
+  apt update && \
+  apt install -y --no-install-recommends gcc python3-dev libssl-dev && \
+  PIP_USER=1 PIP_IGNORE_INSTALLED=1 \
+  pipenv install --deploy --system --ignore-pipfile && \
+  apt remove -y gcc python3-dev libssl-dev && \
+  apt autoremove -y && \
+  pip uninstall pipenv -y
+
+FROM base
+COPY --from=builder $PYROOT/lib $PYROOT/lib
 ENV PYTHONWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
-
 COPY Pipfile Pipfile.lock /code/
-RUN pip install pipenv && pipenv install --system --deploy --dev --ignore-pipfile
-
 COPY . /code/
+
+
+
+# FROM python:3-slim
+
+# # ENV PYTHONDONTWRITEBYTECODE 1
+# ENV PYTHONWRITEBYTECODE 1
+# ENV PYTHONUNBUFFERED 1
+
+# RUN mkdir /code
+# WORKDIR /code
+
+# # both files are explicitly required!
+# COPY Pipfile Pipfile.lock /code/
+
+# RUN pip install pipenv==2018.10.13 && \
+#   apt update && \
+#   apt install -y --no-install-recommends gcc python3-dev libssl-dev && \
+#   pipenv install --deploy --system --ignore-pipfile && \
+#   apt remove -y gcc python3-dev libssl-dev && \
+#   apt autoremove -y && \
+#   pip uninstall pipenv -y
+
+# COPY . /code/
+
+# # CMD ["python", "app.py"]
