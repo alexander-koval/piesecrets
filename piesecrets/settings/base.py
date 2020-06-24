@@ -13,9 +13,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
+ADMINS = (
+    ('Alexander Koval', 'alexander.koval.88@gmail.com')
+)
+
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
-WORK_DIR = BASE_DIR + 'piesecrets'
+# WORK_DIR = BASE_DIR + '/piesecrets'
 
 
 # Quick-start development settings - unsuitable for production
@@ -64,8 +68,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -153,25 +157,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-
-    'compressor.finders.CompressorFinder',
-]
-
-STATICFILES_DIRS = [
-    os.path.join(PROJECT_DIR, 'static'),
-]
-
-# ManifestStaticFilesStorage is recommended in production, to prevent outdated
-# Javascript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
-# See https://docs.djangoproject.com/en/2.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "piesecrets/static"),
+# ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
@@ -179,6 +167,19 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# ManifestStaticFilesStorage is recommended in production, to prevent outdated
+# Javascript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
+# See https://docs.djangoproject.com/en/2.2/ref/contrib/staticfiles/#manifeststaticfilesstorage
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+]
 
 # Wagtail settings
 
@@ -187,3 +188,62 @@ WAGTAIL_SITE_NAME = "piesecrets"
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
 BASE_URL = 'http://piesecrets.ru'
+
+PATH_TO_LOG = '/var/log/piesecrets'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'fmt': {
+            'format':'%(asctime)s %(levelname)-5s (%(name)s) %(message)s',
+            'datefmt':'%Y-%m-%d %H:%M:%S'
+        }
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        '__main__': {
+            'handlers': ['informator', 'warnator', 'errormator'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'informator': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename':'%s/info.log'%PATH_TO_LOG,
+            'formatter':'fmt'
+        },
+        'warnator': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename':'%s/warning.log'%PATH_TO_LOG,
+            'formatter':'fmt'
+        },
+        'errormator': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename':'%s/error.log'%PATH_TO_LOG,
+            'formatter':'fmt'
+        },
+    }
+}

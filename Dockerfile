@@ -1,4 +1,4 @@
-FROM python:3-slim as base
+FROM python:3.8-slim as base
 ENV PYROOT /pyroot
 ENV PYTHONUSERBASE $PYROOT
 
@@ -19,12 +19,18 @@ RUN pip install pipenv==2018.10.13 && \
 
 FROM base
 COPY --from=builder $PYROOT/lib $PYROOT/lib
-ENV PYTHONWRITEBYTECODE 1
+COPY --from=builder $PYROOT/bin $PYROOT/bin
+ENV PATH $PATH:$PYROOT/bin/
+ENV PIPENV_ROOT $PYROOT/lib/python3.8/site-packages
+#ENV PYTHONWRITEBYTECODE 1
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
+RUN mkdir /var/log/piesecrets
 WORKDIR /code
 COPY Pipfile Pipfile.lock /code/
 COPY . /code/
+# ADD ./media /code/media/
 
 
 

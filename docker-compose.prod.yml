@@ -1,16 +1,29 @@
 version: '3'
 
-services:
+services:    
   web:
     image: akoval88/piesecrets_web:latest
-    command: python manage.py runserver 0.0.0.0:8000
-    # command: gunicorn piesecrets.wsgi:application --bind 0.0.0.0:8000
-    ports:
-        - 8000:8000
+    command: gunicorn piesecrets.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+        - static_data:/code/static
+        - media_data:/code/media
+    expose:      
+        - 8000
     env_file:
-        - ./.env.prod
+        - ./.env
     depends_on:
         - db
+
+  nginx:
+    build: ./nginx
+    ports:
+        - 80:80
+        - 443:443
+    volumes:
+         - static_data:/static  
+         - media_data:/media    
+    depends_on:
+        - web        
 
   db:
     image: postgres:12-alpine
@@ -18,5 +31,12 @@ services:
         - POSTGRES_DB=piesecrets
         - POSTGRES_USER=piesecrets
         - POSTGRES_PASSWORD=6UavraTts7nB
+    volumes:
+        - postgres_data:/var/lib/postgresql/data/        
     ports:
-        - "5432:5432"
+        - "5432:5432"            
+
+volumes:
+    postgres_data: 
+    static_data:
+    media_data:

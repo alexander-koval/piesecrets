@@ -1,0 +1,5 @@
+nginx/certificate.crt
+nginx/certificate.csr
+nginx/certificate_ca.crt
+nginx/piesecrets.crt
+nginx/piesecrets.key
