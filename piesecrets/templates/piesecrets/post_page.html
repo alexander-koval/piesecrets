@@ -8,11 +8,11 @@
 {% comment %} {% block canonical %}{% canonical_url self%}{% endblock canonical %} {% endcomment %}
 
 {% block content %}
-<section id="post" class="py-4">
+<section id="post" class="py-md-4">
   <div class="container">
     <div class="row">
       <div class="col-md-8">
-        <div class="card p-5">
+        <div class="card p-md-5">
           <p class="text-center">
             <i class="far fa-clock"></i> {{post.date}} &nbsp;
             </p>
@@ -40,12 +40,13 @@
           {% endif %}
 
 
+
           {% with blocks=self.body %}
           {% for block in blocks %}
           {% if block.block_type == 'heading' %}
           <h2>{{ block.value }}</h2>
           {% else %}
-          <div class="block-{{ block.block_type }} card-body d-flex justify-content-center">
+          <div class="block-{{ block.block_type }} card-body">
             {% if block.block_type == 'image' %}
             {% image block.value original as header_image %}
             <img src="{{ header_image.url }}" class="img-fluid card-img-top"></img>

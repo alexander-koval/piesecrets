@@ -30,30 +30,3 @@ RUN mkdir /var/log/piesecrets
 WORKDIR /code
 COPY Pipfile Pipfile.lock /code/
 COPY . /code/
-# ADD ./media /code/media/
-
-
-
-# FROM python:3-slim
-
-# # ENV PYTHONDONTWRITEBYTECODE 1
-# ENV PYTHONWRITEBYTECODE 1
-# ENV PYTHONUNBUFFERED 1
-
-# RUN mkdir /code
-# WORKDIR /code
-
-# # both files are explicitly required!
-# COPY Pipfile Pipfile.lock /code/
-
-# RUN pip install pipenv==2018.10.13 && \
-#   apt update && \
-#   apt install -y --no-install-recommends gcc python3-dev libssl-dev && \
-#   pipenv install --deploy --system --ignore-pipfile && \
-#   apt remove -y gcc python3-dev libssl-dev && \
-#   apt autoremove -y && \
-#   pip uninstall pipenv -y
-
-# COPY . /code/
-
-# # CMD ["python", "app.py"]
